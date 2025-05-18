@@ -1,10 +1,18 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import './App.css'
+import type { HealthCheckResponse } from '../shared/healthcheck'
 
 function App() {
   const [count, setCount] = useState(0)
+  const [health, setHealth] = useState<HealthCheckResponse | null>(null)
+
+  useEffect(() => {
+    fetch('/api/health')
+      .then(res => res.json())
+      .then(data => setHealth(data))
+      .catch(() => setHealth(null))
+  }, [])
 
   return (
     <>
@@ -28,6 +36,10 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <div style={{ marginTop: '2em' }}>
+        <strong>Health Check:</strong>{' '}
+        {health ? health.status : 'Checking...'}
+      </div>
     </>
   )
 }
