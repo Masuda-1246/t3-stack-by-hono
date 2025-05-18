@@ -20,11 +20,12 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "rootDir": "src"
   },
   "include": [
-    "src/api-node.ts",
-    "src/api.ts",
-    "src/api-lambda.ts"
+    "src/api/node.ts",
+    "src/api/index.ts",
+    "src/api/lambda.ts"
   ]
 }

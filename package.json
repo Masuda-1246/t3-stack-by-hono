@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:api": "tsc --project tsconfig.node.json && node dist/api-node.js",
+    "dev:api": "tsc --project tsconfig.node.json && node dist/api/node.js",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
