@@ -5,11 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:api": "tsc --project tsconfig.node.json && node dist/api-node.js",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@hono/node-server": "^1.14.1",
+    "hono": "^4.7.10",
+    "hono-adapter-aws-lambda": "^1.3.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
@@ -22,6 +26,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
+    "ts-node": "^10.9.2",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1",
     "vite": "^6.3.5"
