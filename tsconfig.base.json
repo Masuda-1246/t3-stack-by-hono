@@ -9,8 +9,5 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
-    "paths": {
-      "schema/*": ["packages/schema/dist/*"]
-    }
   }
 }

@@ -4,27 +4,35 @@ import { zValidator } from '@hono/zod-validator'
 
 const userRoute = new Hono()
 
-const userSchema = z.object({
-  id: z.string(),
+export const createUserSchema = z.object({
   name: z.string(),
   email: z.string().email(),
 })
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const userSchema = z.object({
+  id: z.string(),
+  ...createUserSchema.shape,
+})
+
+const userList = [
+  { id: '1', name: 'Taro', email: 'taro@example.com' },
+  { id: '2', name: 'Jiro', email: 'jiro@example.com' },
+]
+
 const getUsers = userRoute.get('/', (c) => {
   // サンプル: ユーザー一覧を返す
-  const users: z.infer<typeof userSchema>[] = [
-    { id: '1', name: 'Taro', email: 'taro@example.com' },
-    { id: '2', name: 'Jiro', email: 'jiro@example.com' },
-  ]
+  const users: z.infer<typeof userSchema>[] = userList
   return c.json(users)
 })
 
-userRoute.post('/', zValidator('json', userSchema), (c) => {
-  const { id, name, email } = c.req.valid('json')
+const createUser = userRoute.post('/', zValidator('json', createUserSchema), (c) => {
+  const { name, email } = c.req.valid('json')
+  const id = crypto.randomUUID()
+  userList.push({ id, name, email })
   return c.json({ id, name, email })
 })
 
 export type GetUsers = typeof getUsers
+export type CreateUser = typeof createUser
 
 export default userRoute
