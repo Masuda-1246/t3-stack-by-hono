@@ -1,54 +1,42 @@
-# React + TypeScript + Vite
+# 開発構成概要（React + Hono + Zod + ElectroDB）
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🔧 技術スタック
 
-Currently, two official plugins are available:
+| 領域       | 使用技術                 | 備考                    |
+| -------- | -------------------- | --------------------- |
+| フロントエンド  | React + Vite         | 軽量なSPA構成              |
+| APIサーバー  | Hono                 | 型安全で高速なエッジ対応フレームワーク   |
+| スキーマ管理   | Zod                  | 入出力バリデーション & 型共有      |
+| DBアクセス   | ElectroDB + DynamoDB | 型安全・設計指向のDynamoDBラッパー |
+| 状態管理/API | TanStack Query       | APIフェッチとキャッシュ管理       |
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📁 ディレクトリ構成（案）
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```
+apps/
+├── web/                     # Reactアプリ
+│   ├── src/
+│   │   ├── features/         # ドメインごとのUIロジック（user, post等）
+│   │   ├── lib/              # 共通ロジック（APIクライアントなど）
+│   │   ├── hooks/            # TanStack Query用Hooks
+│   │   └── main.tsx         # エントリポイント
+├── api/                     # Hono APIサーバー
+│   ├── routes/              # Honoルーティング（user.tsなど）
+│   ├── entities/            # ElectroDBのEntity定義
+│   └── db.ts                # ElectroDBクライアント生成ロジック
+packages/
+└── schema/                 # Zodスキーマと型定義の共有
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🧠 設計思想
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+* **型安全の一貫性**：すべての入出力にZodを利用し、型情報を共有
+* **APIとUIの疎結合**：Hono + TanStack Queryで役割分離
+* **スキーマ一元管理**：ZodとElectroDBスキーマを統合的に管理
+* **NoSQLベース設計**：pk/skを活かしたDynamoDBの正規設計（RDBライクに管理）
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## ✅ 採用理由まとめ
+
+* Prisma非対応なDynamoDBを使うため、ElectroDBを採用
+* Zodベースの開発文化とElectroDBが相性良いため
+* 型安全・開発体験を損なわない構成を目指す

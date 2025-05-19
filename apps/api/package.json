@@ -1,0 +1,26 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "NODE_OPTIONS='--loader ts-node/esm' ts-node src/node.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@hono/node-server": "^1.14.1",
+    "@types/aws-lambda": "^8.10.149",
+    "@types/node": "^22.15.19",
+    "aws-sdk": "^2.1692.0",
+    "dotenv": "^16.5.0",
+    "electrodb": "^3.4.1",
+    "hono": "^4.7.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "zod": "^3.24.4"
+  },
+  "type": "module"
+}
