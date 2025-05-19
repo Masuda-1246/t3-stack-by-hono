@@ -1,4 +1,4 @@
-# 開発構成概要（React + Hono + Zod + ElectroDB）
+# 開発構成概要（React + Hono + Zod）
 
 ## 🔧 技術スタック
 
