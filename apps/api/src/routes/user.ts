@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import type { User } from 'schema/src/user.js'
+import type { User } from 'schema/src/user'
 
 const userRoute = new Hono()
 

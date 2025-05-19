@@ -4,7 +4,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "NODE_OPTIONS='--loader ts-node/esm' ts-node src/node.ts"
+    "dev": "NODE_OPTIONS='--loader ts-node/esm' ts-node src/node.ts",
+    "build:ecs": "tsc --project tsconfig.ecs.json",
+    "build:lambda": "tsc --project tsconfig.lambda.json",
+    "build": "npm run build:ecs && npm run build:lambda"
   },
   "keywords": [],
   "author": "",
@@ -18,8 +21,12 @@
     "dotenv": "^16.5.0",
     "electrodb": "^3.4.1",
     "hono": "^4.7.10",
+    "hono-adapter-aws-lambda": "^1.3.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
+    "zod": "^3.24.4"
+  },
+  "devDependencies": {
     "zod": "^3.24.4"
   },
   "type": "module"

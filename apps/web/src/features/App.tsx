@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { User } from 'schema/src/user'
+import type { User } from 'schema/src/user'
 
 export default function App() {
   const { data: users, isLoading } = useQuery<User[]>({
