@@ -7,31 +7,70 @@
 | フロントエンド  | React + Vite         | 軽量なSPA構成              |
 | APIサーバー  | Hono                 | 型安全で高速なエッジ対応フレームワーク   |
 | スキーマ管理   | Zod                  | 入出力バリデーション & 型共有      |
-| DBアクセス   | ElectroDB + DynamoDB | 型安全・設計指向のDynamoDBラッパー |
 | 状態管理/API | TanStack Query       | APIフェッチとキャッシュ管理       |
 
-## 📁 ディレクトリ構成（案）
+## 📁 ディレクトリ構成（最新版）
 
 ```
 apps/
 ├── web/                     # Reactアプリ
 │   ├── src/
-│   │   ├── features/         # ドメインごとのUIロジック（user, post等）
+│   │   ├── pages/           # 各ページコンポーネント（User.tsx等）
+│   │   ├── App.tsx
 │   │   └── main.tsx         # エントリポイント
+│   ├── dist/                # ビルド成果物
+│   ├── node_modules/
+│   ├── index.html
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── tsconfig.app.json
+│   ├── tsconfig.node.json
+│   └── vite.config.ts
 ├── api/                     # Hono APIサーバー
-│   ├── routes/              # Honoルーティング（user.tsなど）
+│   ├── src/
+│   │   ├── routes/          # Honoルーティング（user.ts, frontend.ts等）
+│   │   ├── index.ts
+│   │   ├── lambda.ts
+│   │   └── node.ts
+│   ├── dist/                # ビルド成果物
+│   ├── dist-api/            # 別ビルド成果物
+│   │   └── routes/          # ビルド後のルーティング
+│   ├── node_modules/
+│   ├── package.json
+│   └── tsconfig.json
 
 ```
 
-## 🧠 設計思想
 
-* **型安全の一貫性**：すべての入出力にZodを利用し、型情報を共有
-* **APIとUIの疎結合**：Hono + TanStack Queryで役割分離
-* **スキーマ一元管理**：ZodとElectroDBスキーマを統合的に管理
-* **NoSQLベース設計**：pk/skを活かしたDynamoDBの正規設計（RDBライクに管理）
+## 🧠 設計思想（詳細）
 
-## ✅ 採用理由まとめ
+* **型安全の一貫性（End-to-End Type Safety）**
+  APIリクエスト・レスポンス、フロントのフォームバリデーションに至るまで、**Zodでスキーマを統一**。型の単一ソースを保つことで、ヒューマンエラーを削減し、保守性を向上。
 
-* Prisma非対応なDynamoDBを使うため、ElectroDBを採用
-* Zodベースの開発文化とElectroDBが相性良いため
-* 型安全・開発体験を損なわない構成を目指す
+* **疎結合なフロント＆バック構成**
+  フロントとバックを`TanStack Query`と`Hono`で分離し、**明確な責務分担と再利用性の高いAPI設計**を実現。UI/UX改善やバックエンド変更も個別に対応しやすい。
+
+* **ビルド・デプロイの柔軟性**
+  各アプリ（web/api）を**独立してビルド・デプロイ可能**な構成とし、サーバレスやマイクロサービス構成にも対応しやすい。将来的なスケールにも柔軟に対応。
+
+* **ローカル開発の体験最優先**
+  Viteによる高速ビルドやHonoの軽量な起動により、**変更→確認のサイクルを高速化**。開発効率を損なわない設計。
+
+## ✅ 採用理由（詳細）
+
+* **Zod採用理由**
+
+  * TypeScriptとの親和性が高く、**型の宣言と同時にバリデーションが可能**
+  * 入出力の明示的な型制約により、**不正データの流入を防止**
+  * フロント・API間でスキーマを共有できるため、**仕様変更の反映が速い**
+
+* **Hono採用理由**
+
+  * TypeScript完全対応、**宣言的なルーティングと型の相性が抜群**
+  * **エッジ対応可能な軽量設計**で、将来的なCloudflare Workers展開も視野に
+  * Expressに比べて記述量が少なく、**コードの可読性・保守性が高い**
+
+* **TanStack Query採用理由**
+
+  * 再フェッチやキャッシュ管理、状態の同期などを**ほぼゼロコストで実装可能**
+  * 非同期状態管理のロジックをコンポーネント外に集約できるため、**UIコードがスリム**
