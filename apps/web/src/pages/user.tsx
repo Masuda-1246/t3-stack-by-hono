@@ -1,11 +1,15 @@
+import { hc } from 'hono/client'
+import type { GetUsers } from 'api/src/routes/user'
 import { useQuery } from '@tanstack/react-query'
-import type { User } from 'schema/src/user'
 
-export default function App() {
-  const { data: users, isLoading } = useQuery<User[]>({
+export default function User() {
+
+  const client = hc<GetUsers>('/api/users')
+
+  const { data: users, isLoading } = useQuery({
     queryKey: ['users'],
     queryFn: async () => {
-      const res = await fetch('/api/users')
+      const res = await client.index.$get()
       return res.json()
     },
   })
@@ -24,4 +28,4 @@ export default function App() {
       )}
     </div>
   )
-} 
+}

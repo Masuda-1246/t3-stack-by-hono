@@ -10,8 +10,7 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
-dist-lambda
-dist-ecs
+dist-api
 *.local
 
 # Editor directories and files
@@ -28,3 +27,4 @@ dist-ecs
 
 # AWS SAM
 .aws-sam
+samconfig.toml

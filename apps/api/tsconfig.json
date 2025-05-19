@@ -2,16 +2,9 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "dist",
+    "outDir": "dist-api",
     "baseUrl": ".",
-    "paths": {
-      "schema/*": ["../../packages/schema/dist/*"]
-    },
     "skipLibCheck": true
   },
-  "include": [
-    "src",
-    "../../packages/schema/dist"
-  ],
-  "exclude": ["node_modules"]
+  "include": ["src/node.ts"]
 }

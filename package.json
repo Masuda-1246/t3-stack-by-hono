@@ -13,8 +13,7 @@
     "dev": "npm-run-all -p dev:web dev:api",
     "build:web": "npm run build:local --workspace=web",
     "build:api": "npm run build --workspace=api",
-    "build:schema": "npm run build --workspace=schema",
-    "build": "npm-run-all build:web build:api build:schema",
+    "build": "npm-run-all build:web build:api",
     "lint": "eslint .",
     "preview": "vite preview"
   },

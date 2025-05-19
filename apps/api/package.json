@@ -5,9 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "NODE_OPTIONS='--loader ts-node/esm' ts-node src/node.ts",
-    "build:ecs": "tsc --project tsconfig.ecs.json",
-    "build:lambda": "tsc --project tsconfig.lambda.json",
-    "build": "npm run build:ecs && npm run build:lambda"
+    "build": "tsc --project tsconfig.json"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +13,8 @@
   "description": "",
   "dependencies": {
     "@hono/node-server": "^1.14.1",
+    "@hono/trpc-server": "^0.3.4",
+    "@hono/zod-validator": "^0.5.0",
     "@types/aws-lambda": "^8.10.149",
     "@types/node": "^22.15.19",
     "aws-sdk": "^2.1692.0",
