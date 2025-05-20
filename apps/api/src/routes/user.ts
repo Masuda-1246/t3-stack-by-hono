@@ -19,7 +19,7 @@ const userList = [
   { id: '2', name: 'Jiro', email: 'jiro@example.com' },
 ]
 
-const getUsers = userRoute.get('/', (c) => {
+const getUsers = userRoute.get('/all/users', (c) => {
   // サンプル: ユーザー一覧を返す
   const users: z.infer<typeof userSchema>[] = userList
   return c.json(users)
@@ -32,7 +32,14 @@ const createUser = userRoute.post('/', zValidator('json', createUserSchema), (c)
   return c.json({ id, name, email })
 })
 
+const userHndler = {
+  getUsers,
+  createUser,
+}
+
 export type GetUsers = typeof getUsers
 export type CreateUser = typeof createUser
+
+export type UserHandler = typeof userHndler
 
 export default userRoute

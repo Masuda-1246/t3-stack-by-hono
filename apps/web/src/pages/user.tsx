@@ -1,17 +1,17 @@
 import type { FormEventHandler } from "react";
 import { hc } from 'hono/client'
 import { z } from 'zod'
-import { type GetUsers, type CreateUser, createUserSchema } from 'api/src/routes/user'
+import { type UserHandler, createUserSchema } from 'api/src/routes/user'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 export default function User() {
-  const getUsersClient = hc<GetUsers>('/api/users')
-  const createUserClient = hc<CreateUser>('/api/users')
+  const getUsersClient = hc<UserHandler['getUsers']>('/api/users')
+  const createUserClient = hc<UserHandler['createUser']>('/api/users')
 
   const { data: userList, isLoading: isUserListLoading } = useQuery({
     queryKey: ['users'],
     queryFn: async () => {
-      const res = await getUsersClient.index.$get()
+      const res = await getUsersClient.all.users.$get()
       return res.json()
     },
   })
