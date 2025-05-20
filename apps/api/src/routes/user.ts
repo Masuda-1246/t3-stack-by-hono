@@ -17,9 +17,10 @@ export const userSchema = z.object({
 const userList = [
   { id: '1', name: 'Taro', email: 'taro@example.com' },
   { id: '2', name: 'Jiro', email: 'jiro@example.com' },
+  { id: '3', name: 'Saburo', email: 'saburo@example.com' },
 ]
 
-const getUsers = userRoute.get('/all/users', (c) => {
+const getUsers = userRoute.get('/', (c) => {
   // サンプル: ユーザー一覧を返す
   const users: z.infer<typeof userSchema>[] = userList
   return c.json(users)

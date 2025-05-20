@@ -11,7 +11,7 @@ export default function User() {
   const { data: userList, isLoading: isUserListLoading } = useQuery({
     queryKey: ['users'],
     queryFn: async () => {
-      const res = await getUsersClient.all.users.$get()
+      const res = await getUsersClient.index.$get()
       return res.json()
     },
   })

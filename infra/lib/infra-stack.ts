@@ -1,16 +1,47 @@
-import * as cdk from 'aws-cdk-lib';
-import { Construct } from 'constructs';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
+import * as cdk from 'aws-cdk-lib'
+import { Construct } from 'constructs'
+import * as lambda from 'aws-cdk-lib/aws-lambda'
+import * as apigwv2 from 'aws-cdk-lib/aws-apigatewayv2'
+import * as integrations from 'aws-cdk-lib/aws-apigatewayv2-integrations'
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs'
+import * as path from 'path'
 
-export class InfraStack extends cdk.Stack {
+export class MyAppStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
-    super(scope, id, props);
+    super(scope, id, props)
 
-    // The code that defines your stack goes here
+    const fn = new NodejsFunction(this, 'lambda', {
+      entry: '../apps/api/src/lambda.ts',
+      handler: 'handler',
+      runtime: lambda.Runtime.NODEJS_22_X,
+      bundling: {
+        commandHooks: {
+          afterBundling(inputDir: string, outputDir: string): string[] {
+            // distをoutputDirにコピー
+            return [
+              `cp -r ${path.join(__dirname, '../../apps/web/dist')} ${outputDir}/dist`
+            ];
+          },
+          beforeBundling() { return [
+            'cd ..',
+            'npm install',
+            `npm run build`,
+          ]; },
+          beforeInstall() { return []; }
+        }
+      }
+    })
+    fn.addFunctionUrl({
+      authType: lambda.FunctionUrlAuthType.NONE, // 認証なしに設定
+    })
+    // HTTP API Gatewayの作成
+    const httpApi = new apigwv2.HttpApi(this, 'myHttpApi', {
+      apiName: 'myapi',
+      defaultIntegration: new integrations.HttpLambdaIntegration('LambdaIntegration', fn),
+    })
 
-    // example resource
-    // const queue = new sqs.Queue(this, 'InfraQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
+    new cdk.CfnOutput(this, 'HttpApiUrl', {
+      value: httpApi.url || '',
+    })
   }
 }

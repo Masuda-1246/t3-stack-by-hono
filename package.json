@@ -11,9 +11,10 @@
     "dev:web": "npm run dev --workspace=web",
     "dev:api": "npm run dev --workspace=api",
     "dev": "npm-run-all -p dev:web dev:api",
-    "build:web": "npm run build:local --workspace=web",
+    "build:web": "npm run build --workspace=web",
+    "build:web:local": "npm run build:local --workspace=web",
     "build:api": "npm run build --workspace=api",
-    "build": "npm-run-all build:web build:api",
+    "build": "npm-run-all build:web build:web:local build:api",
     "lint": "eslint .",
     "preview": "vite preview"
   },

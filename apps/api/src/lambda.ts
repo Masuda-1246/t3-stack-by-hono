@@ -1,4 +1,3 @@
-import { handle } from 'hono-adapter-aws-lambda'
+import { handle } from "hono/aws-lambda";
 import app from './index.js'
-
-export const webHandler = handle(app)
+export const handler = handle(app);
