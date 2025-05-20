@@ -5,13 +5,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "NODE_OPTIONS='--loader ts-node/esm' ts-node src/node.ts",
-    "build": "tsc --project tsconfig.json"
+    "build": "tsc --project tsconfig.json",
+    "create-table": "npx tsx script/createTabele.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.812.0",
     "@hono/node-server": "^1.14.1",
     "@hono/trpc-server": "^0.3.4",
     "@hono/zod-validator": "^0.5.0",

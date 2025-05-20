@@ -3,7 +3,6 @@ import { serveStatic } from '@hono/node-server/serve-static'
 import { join } from 'path'
 
 const distPath = './dist'
-console.log('distPath:', distPath)
 
 const frontendRoute = new Hono()
 

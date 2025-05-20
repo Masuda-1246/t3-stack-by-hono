@@ -2,6 +2,8 @@ import { Hono } from 'hono'
 import { z } from 'zod'
 import { zValidator } from '@hono/zod-validator'
 
+import { UserEntity } from '../models/user.js'
+
 const userRoute = new Hono()
 
 export const createUserSchema = z.object({
@@ -14,23 +16,22 @@ export const userSchema = z.object({
   ...createUserSchema.shape,
 })
 
-const userList = [
-  { id: '1', name: 'Taro', email: 'taro@example.com' },
-  { id: '2', name: 'Jiro', email: 'jiro@example.com' },
-  { id: '3', name: 'Saburo', email: 'saburo@example.com' },
-]
 
-const getUsers = userRoute.get('/', (c) => {
+const getUsers = userRoute.get('/', async (c) => {
   // サンプル: ユーザー一覧を返す
-  const users: z.infer<typeof userSchema>[] = userList
+  const { data: users } = await UserEntity.query.userByCreatedAt({type: 'user'}).go()
   return c.json(users)
 })
 
-const createUser = userRoute.post('/', zValidator('json', createUserSchema), (c) => {
-  const { name, email } = c.req.valid('json')
-  const id = crypto.randomUUID()
-  userList.push({ id, name, email })
-  return c.json({ id, name, email })
+const createUser = userRoute.post('/', zValidator('json', createUserSchema), async (c) => {
+  const body = await c.req.json()
+  const result = createUserSchema.safeParse(body)
+  if (!result.success) {
+    return c.json({ error: result.error.message }, 400)
+  }
+  const { name, email } = result.data
+  await UserEntity.put({ name, email }).go()
+  return c.json({ name, email })
 })
 
 const userHndler = {
